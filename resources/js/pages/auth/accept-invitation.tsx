@@ -11,6 +11,7 @@ import { home, login } from '@/routes';
 type Props = {
     isValid: boolean;
     sellerName: string;
+    hasShop: boolean;
     email: string;
     action: string;
     passwordRules: string;
@@ -22,6 +23,7 @@ type Props = {
 export default function AcceptInvitation({
     isValid,
     sellerName,
+    hasShop,
     email,
     action,
     passwordRules,
@@ -57,11 +59,13 @@ export default function AcceptInvitation({
 
     return (
         <>
-            <Head title="Activer mon compte vendeur" />
+            <Head title="Activer mon compte" />
 
             <p className="mb-8 text-muted-foreground">
-                Bienvenue {sellerName} ! Votre boutique est prête : choisissez
-                votre mot de passe pour y accéder.
+                Bienvenue {sellerName} !{' '}
+                {hasShop
+                    ? 'Votre boutique est prête : choisissez votre mot de passe pour y accéder.'
+                    : 'Choisissez votre mot de passe pour accéder à votre compte Kanvô.'}
             </p>
 
             <Form
@@ -126,5 +130,5 @@ export default function AcceptInvitation({
 }
 
 AcceptInvitation.layout = {
-    title: 'Votre boutique Kanvô',
+    title: 'Activer votre compte',
 };

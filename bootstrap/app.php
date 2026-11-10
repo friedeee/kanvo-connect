@@ -19,6 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        /*
+         * En ligne, le site est derrière le proxy de Laravel Cloud (HTTPS terminé en amont) :
+         * on lui fait confiance pour connaître le vrai schéma, indispensable aux liens signés (invitations).
+         */
+        $middleware->trustProxies(at: '*');
+
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [

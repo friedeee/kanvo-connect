@@ -26,6 +26,7 @@ class InvitationController extends Controller
         return Inertia::render('auth/accept-invitation', [
             'isValid' => $this->isValid($request, $user),
             'sellerName' => $user->name,
+            'hasShop' => $user->seller()->exists(),
             'email' => $user->email,
             'action' => $request->fullUrl(),
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
