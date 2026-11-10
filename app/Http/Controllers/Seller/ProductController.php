@@ -36,6 +36,8 @@ class ProductController extends Controller
                 'status_label' => $product->status->label(),
                 'status_reason' => $product->status_reason,
                 'image_url' => $product->images->first()?->url,
+                'images_count' => $product->images->count(),
+                'colors' => $product->colors,
             ]);
 
         return Inertia::render('seller/products/index', ['products' => $products]);
