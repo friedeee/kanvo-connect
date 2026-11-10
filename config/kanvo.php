@@ -28,6 +28,13 @@ return [
     'max_product_images' => 8,
 
     /*
+    | Numéro WhatsApp de l'équipe Kanvô, au format international (ex. 2290197939315).
+    | Les clients y envoient leurs commandes depuis les fiches produit ; l'équipe transmet
+    | à l'artisan, dont le téléphone reste privé. Vide : le bouton n'est pas affiché.
+    */
+    'whatsapp' => env('KANVO_WHATSAPP'),
+
+    /*
     | Prestataire de paiement. Seul le prestataire « fake » existe tant qu'aucun
     | prestataire réel n'a confirmé par écrit son offre (cahier des charges, § 4.5 et § 14).
     */

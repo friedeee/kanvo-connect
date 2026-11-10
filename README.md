@@ -1,4 +1,4 @@
-# Kanvô Connect
+# Kanvô
 
 Marketplace spécialisée dans le pagne tissé béninois. Ce dépôt contient le **squelette technique** du MVP défini dans le cahier des charges fonctionnel v1.0.
 

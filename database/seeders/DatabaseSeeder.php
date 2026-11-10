@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
             $seller = Seller::factory()
                 ->approved()
                 ->for(User::factory()->state(array_filter(['email' => $email, 'name' => $name])))
-                ->create(['shop_name' => $name, 'craft' => $craft, 'city' => $city, 'bio' => "{$name} — vendeur fictif utilisé pour la démonstration de Kanvô Connect."]);
+                ->create(['shop_name' => $name, 'craft' => $craft, 'city' => $city, 'bio' => "{$name} — vendeur fictif utilisé pour la démonstration de Kanvô."]);
 
             foreach (range(1, 4) as $i) {
                 Product::factory()->for($seller)->create([

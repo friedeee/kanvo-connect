@@ -161,7 +161,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Pas d'inscription publique : seul l'admin crée les comptes (vendeurs, par invitation).
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([

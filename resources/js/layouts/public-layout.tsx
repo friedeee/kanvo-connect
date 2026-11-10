@@ -3,10 +3,13 @@ import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import AppLogoIcon from '@/components/app-logo-icon';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
-import { dashboard, home, login, register } from '@/routes';
+import { dashboard, home, login } from '@/routes';
 import { index as catalog } from '@/routes/catalog';
-import { apply } from '@/routes/seller';
+
+/** Les boutiques sont ouvertes par l'équipe Kanvô : les artisans la contactent depuis l'accueil. */
+const joinUrl = `${home.url()}#rejoindre`;
 
 export function BrandMark({ light = false }: { light?: boolean }) {
     const { name } = usePage().props;
@@ -22,11 +25,10 @@ export function BrandMark({ light = false }: { light?: boolean }) {
             <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">
                 <AppLogoIcon className="size-6 fill-current" />
             </span>
-            <span className="font-display text-xl leading-none tracking-tight">
-                {String(name).replace(' Connect', '')}
+            <span className="font-display text-2xl leading-none tracking-tight">
+                {String(name)}
                 <span className={light ? 'text-gold' : 'text-gold-foreground'}>
-                    {' '}
-                    Connect
+                    .
                 </span>
             </span>
         </Link>
@@ -91,28 +93,38 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                         <Link href={catalog()} className={linkClass}>
                             Catalogue
                         </Link>
-                        <Link href={apply()} className={linkClass}>
-                            Vendre sur Kanvô
+                        <Link href={joinUrl} className={linkClass}>
+                            Devenir vendeur
                         </Link>
+                        <ThemeToggle
+                            className={
+                                overlay
+                                    ? 'text-white/85 hover:bg-white/10 hover:text-white'
+                                    : 'text-foreground/80 hover:bg-accent hover:text-foreground'
+                            }
+                        />
                         {auth.user ? (
                             <Link href={dashboard()} className={ctaClass}>
                                 Mon espace
                             </Link>
                         ) : (
-                            <>
-                                <Link href={login()} className={linkClass}>
-                                    Connexion
-                                </Link>
-                                <Link href={register()} className={ctaClass}>
-                                    Créer un compte
-                                </Link>
-                            </>
+                            <Link href={login()} className={ctaClass}>
+                                Connexion
+                            </Link>
                         )}
                     </nav>
+                    <ThemeToggle
+                        className={cn(
+                            'ml-auto md:hidden',
+                            overlay
+                                ? 'text-white hover:bg-white/10'
+                                : 'text-foreground hover:bg-accent',
+                        )}
+                    />
                     <button
                         type="button"
                         className={cn(
-                            'ml-auto grid size-11 place-items-center rounded-full md:hidden',
+                            'grid size-11 place-items-center rounded-full md:hidden',
                             overlay
                                 ? 'text-white hover:bg-white/10'
                                 : 'text-foreground hover:bg-accent',
@@ -142,10 +154,10 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                             Catalogue
                         </Link>
                         <Link
-                            href={apply()}
+                            href={joinUrl}
                             className="rounded-xl px-4 py-3 font-medium hover:bg-accent"
                         >
-                            Vendre sur Kanvô
+                            Devenir vendeur
                         </Link>
                         {auth.user ? (
                             <Link
@@ -155,20 +167,12 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                                 Mon espace
                             </Link>
                         ) : (
-                            <>
-                                <Link
-                                    href={login()}
-                                    className="rounded-xl px-4 py-3 font-medium hover:bg-accent"
-                                >
-                                    Connexion
-                                </Link>
-                                <Link
-                                    href={register()}
-                                    className="mt-2 rounded-full bg-primary px-5 py-3 text-center font-medium text-primary-foreground"
-                                >
-                                    Créer un compte
-                                </Link>
-                            </>
+                            <Link
+                                href={login()}
+                                className="mt-2 rounded-full bg-primary px-5 py-3 text-center font-medium text-primary-foreground"
+                            >
+                                Connexion
+                            </Link>
                         )}
                     </nav>
                 )}
@@ -230,7 +234,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                         <ul className="grid gap-2 text-sm">
                             <li>
                                 <Link
-                                    href={apply()}
+                                    href={joinUrl}
                                     className="hover:text-white"
                                 >
                                     Vendre sur Kanvô

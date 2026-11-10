@@ -1,4 +1,5 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
+import { Mail, Plus } from 'lucide-react';
 import Heading from '@/components/heading';
 import { Pagination } from '@/components/pagination';
 import { ReasonDialog } from '@/components/reason-dialog';
@@ -7,7 +8,9 @@ import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/format';
 import {
     approve,
+    create,
     index,
+    invitation,
     reactivate,
     reject,
     suspend,
@@ -28,6 +31,7 @@ type Row = {
     products_count: number;
     applied_at: string;
     user: { name: string; email: string };
+    invitation_pending: boolean;
 };
 
 export default function AdminSellers({
@@ -43,7 +47,18 @@ export default function AdminSellers({
         <>
             <Head title="Vendeurs" />
             <div className="space-y-6 p-4">
-                <Heading title="Vendeurs" />
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                    <Heading
+                        title="Vendeurs"
+                        description="Seule l’équipe Kanvô crée les comptes vendeurs."
+                    />
+                    <Button asChild>
+                        <Link href={create()}>
+                            <Plus aria-hidden />
+                            Nouveau vendeur
+                        </Link>
+                    </Button>
+                </div>
                 <StatusTabs
                     statuses={statuses}
                     current={status}
@@ -63,12 +78,16 @@ export default function AdminSellers({
                             className="space-y-3 rounded-xl border p-4"
                         >
                             <div className="flex flex-wrap items-baseline justify-between gap-2">
-                                <h2 className="font-medium">
+                                <h2 className="flex flex-wrap items-center gap-2 font-medium">
                                     {seller.shop_name}
+                                    {seller.invitation_pending && (
+                                        <span className="rounded-full bg-gold/15 px-2 py-0.5 text-xs font-normal text-gold-foreground">
+                                            Invitation en attente
+                                        </span>
+                                    )}
                                 </h2>
                                 <p className="text-xs text-muted-foreground">
-                                    Demande du{' '}
-                                    {formatDateTime(seller.applied_at)}
+                                    Créé le {formatDateTime(seller.applied_at)}
                                 </p>
                             </div>
                             <dl className="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
@@ -107,6 +126,23 @@ export default function AdminSellers({
                                 </p>
                             )}
                             <div className="flex flex-wrap gap-2">
+                                {seller.invitation_pending && (
+                                    <Form
+                                        {...invitation.form(seller.id)}
+                                        options={{ preserveScroll: true }}
+                                    >
+                                        {({ processing }) => (
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                disabled={processing}
+                                            >
+                                                <Mail aria-hidden />
+                                                Renvoyer l’invitation
+                                            </Button>
+                                        )}
+                                    </Form>
+                                )}
                                 {seller.status === 'pending' && (
                                     <>
                                         <Form

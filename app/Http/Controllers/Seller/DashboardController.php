@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $seller = $request->user()->seller;
 
         if (! $seller) {
-            return to_route('seller.apply');
+            return to_route('dashboard');
         }
 
         $counts = $seller->products()

@@ -1,7 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     Clock,
+    MessageCircle,
     PackageCheck,
     Ruler,
     ShieldCheck,
@@ -12,9 +13,30 @@ import { colorHex } from '@/components/woven-pattern';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { formatDimensions, formatXof } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { whatsappUrl } from '@/lib/whatsapp';
 import { index as catalog } from '@/routes/catalog';
 import { show as sellerProfile } from '@/routes/sellers';
 import type { ProductDetail } from '@/types/kanvo';
+
+/**
+ * Lien wa.me avec un message déjà rédigé : le client n'a plus qu'à appuyer sur « Envoyer ».
+ */
+function whatsappOrderUrl(number: string, product: ProductDetail): string {
+    const intro = product.is_available
+        ? 'Bonjour Kanvô ! Je souhaite commander cette pièce :'
+        : 'Bonjour Kanvô ! Cette pièce m’intéresse, sera-t-elle de nouveau disponible ?';
+    const message = [
+        intro,
+        `• ${product.name}`,
+        `• ${formatXof(product.price_xof)} (${product.sale_unit.toLowerCase()})`,
+        `• Atelier : ${product.seller.shop_name}`,
+        typeof window !== 'undefined' ? window.location.href : '',
+    ]
+        .filter(Boolean)
+        .join('\n');
+
+    return whatsappUrl(number, message);
+}
 
 export default function Product({
     product,
@@ -23,6 +45,7 @@ export default function Product({
     product: ProductDetail;
     isPreview: boolean;
 }) {
+    const { whatsappNumber } = usePage().props;
     const [current, setCurrent] = useState(0);
     const image = product.images[current] ?? null;
     const dimensions = formatDimensions(product.length_cm, product.width_cm);
@@ -171,22 +194,56 @@ export default function Product({
                             </div>
                         )}
 
-                        <div className="rounded-2xl border border-dashed bg-card p-5">
-                            <p className="font-medium">
-                                La commande en ligne ouvre bientôt
-                            </p>
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                Les frais de livraison seront affichés avant le
-                                paiement. En attendant, découvrez l’atelier de{' '}
-                                {product.seller.shop_name}.
-                            </p>
-                            <Link
-                                href={sellerProfile(product.seller.slug)}
-                                className="mt-4 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-                            >
-                                Voir l’atelier
-                            </Link>
-                        </div>
+                        {whatsappNumber && !isPreview ? (
+                            <div className="rounded-2xl border bg-card p-5 shadow-sm">
+                                <a
+                                    href={whatsappOrderUrl(
+                                        whatsappNumber,
+                                        product,
+                                    )}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group flex h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#1f8f4e] px-6 font-medium text-white shadow-lg shadow-[#1f8f4e]/25 transition hover:-translate-y-0.5 hover:bg-[#187a41] focus-visible:ring-[3px] focus-visible:ring-[#1f8f4e]/40 focus-visible:outline-none"
+                                >
+                                    <MessageCircle
+                                        className="size-5 transition group-hover:rotate-[-8deg]"
+                                        aria-hidden
+                                    />
+                                    {product.is_available
+                                        ? 'Commander sur WhatsApp'
+                                        : 'Demander sur WhatsApp'}
+                                </a>
+                                <p className="mt-3 text-center text-sm text-muted-foreground">
+                                    Le message est déjà rédigé avec cette pièce.
+                                    L’équipe Kanvô vous répond et organise la
+                                    livraison avec l’atelier.
+                                </p>
+                                <Link
+                                    href={sellerProfile(product.seller.slug)}
+                                    className="mt-3 block text-center text-sm font-medium text-primary hover:underline"
+                                >
+                                    Découvrir l’atelier de{' '}
+                                    {product.seller.shop_name}
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="rounded-2xl border border-dashed bg-card p-5">
+                                <p className="font-medium">
+                                    La commande en ligne ouvre bientôt
+                                </p>
+                                <p className="mt-1 text-sm text-muted-foreground">
+                                    Les frais de livraison seront affichés avant
+                                    le paiement. En attendant, découvrez
+                                    l’atelier de {product.seller.shop_name}.
+                                </p>
+                                <Link
+                                    href={sellerProfile(product.seller.slug)}
+                                    className="mt-4 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+                                >
+                                    Voir l’atelier
+                                </Link>
+                            </div>
+                        )}
 
                         <div className="text-base leading-relaxed whitespace-pre-line text-foreground/85">
                             {product.description}

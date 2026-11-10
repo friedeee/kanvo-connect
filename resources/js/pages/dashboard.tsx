@@ -1,9 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
-import { dashboard } from '@/routes';
+import { dashboard, home } from '@/routes';
 import { index as catalog } from '@/routes/catalog';
-import { apply } from '@/routes/seller';
 
 export default function Dashboard() {
     return (
@@ -28,11 +27,13 @@ export default function Dashboard() {
                     <div className="rounded-xl border p-4">
                         <h2 className="font-medium">Vous êtes artisan ?</h2>
                         <p className="mt-1 text-sm text-muted-foreground">
-                            Tisserands, ateliers, stylistes et couturiers
-                            peuvent demander à vendre sur Kanvô.
+                            Les boutiques sont ouvertes par l’équipe Kanvô.
+                            Présentez-nous votre atelier.
                         </p>
                         <Button asChild className="mt-4">
-                            <Link href={apply()}>Devenir vendeur</Link>
+                            <Link href={`${home.url()}#rejoindre`}>
+                                Devenir vendeur
+                            </Link>
                         </Button>
                     </div>
                 </div>

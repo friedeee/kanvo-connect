@@ -1,6 +1,6 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { SlidersHorizontal } from 'lucide-react';
-import { AmbiancePhoto } from '@/components/ambiance-photo';
+import { PhotoSlideshow } from '@/components/photo-slideshow';
 import { Pagination } from '@/components/pagination';
 import { ProductCard } from '@/components/product-card';
 import { Button } from '@/components/ui/button';
@@ -47,13 +47,11 @@ export default function Catalog({
             <Head title="Catalogue" />
 
             <section className="relative -mt-18 overflow-hidden bg-ink pt-18 text-white">
-                <AmbiancePhoto
-                    name="etals"
-                    eager
+                <PhotoSlideshow
+                    photos={['etals', 'ouidah', 'kente-ewe-2', 'bandes-tafi']}
                     className="absolute inset-0"
-                    imgClassName="animate-slow-zoom"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/30" />
                 <div className="relative mx-auto max-w-7xl px-5 py-16 sm:py-20">
                     <p className="animate-rise text-xs font-semibold tracking-[0.22em] text-gold uppercase">
                         {products.meta.total} pièce

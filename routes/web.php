@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Auth\InvitationController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Seller;
@@ -13,6 +14,14 @@ Route::get('catalogue', [CatalogController::class, 'index'])->name('catalog.inde
 Route::get('produits/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
 Route::get('artisans/{seller:slug}', [SellerProfileController::class, 'show'])->name('sellers.show');
 
+/* Invitation vendeur : lien signé reçu par e-mail pour choisir son mot de passe. */
+Route::middleware('guest')->group(function () {
+    Route::get('invitation/{user}', [InvitationController::class, 'show'])->name('invitation.show');
+    Route::post('invitation/{user}', [InvitationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('invitation.store');
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function (Request $request) {
         return match (true) {
@@ -23,10 +32,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::prefix('vendeur')->name('seller.')->group(function () {
-        Route::get('inscription', [Seller\ApplicationController::class, 'create'])->name('apply');
-        Route::post('inscription', [Seller\ApplicationController::class, 'store'])
-            ->middleware('throttle:5,1')
-            ->name('apply.store');
         Route::get('/', Seller\DashboardController::class)->name('dashboard');
 
         Route::middleware('seller.approved')->prefix('produits')->name('products.')->group(function () {
@@ -45,6 +50,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', Admin\DashboardController::class)->name('dashboard');
 
         Route::get('vendeurs', [Admin\SellerController::class, 'index'])->name('sellers.index');
+        Route::get('vendeurs/nouveau', [Admin\SellerController::class, 'create'])->name('sellers.create');
+        Route::post('vendeurs', [Admin\SellerController::class, 'store'])->name('sellers.store');
+        Route::post('vendeurs/{seller}/invitation', [Admin\SellerController::class, 'resendInvitation'])
+            ->middleware('throttle:10,1')
+            ->name('sellers.invitation');
         Route::post('vendeurs/{seller}/valider', [Admin\SellerController::class, 'approve'])->name('sellers.approve');
         Route::post('vendeurs/{seller}/refuser', [Admin\SellerController::class, 'reject'])->name('sellers.reject');
         Route::post('vendeurs/{seller}/suspendre', [Admin\SellerController::class, 'suspend'])->name('sellers.suspend');

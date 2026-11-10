@@ -88,6 +88,24 @@ class CatalogTest extends TestCase
                 ->missing('product.seller.phone'));
     }
 
+    public function test_product_page_shares_kanvo_whatsapp_number_in_digits_only(): void
+    {
+        config(['kanvo.whatsapp' => '+229 01 97 93 93 15']);
+        $product = Product::factory()->published()->create();
+
+        $this->get(route('catalog.show', $product))
+            ->assertInertia(fn (Assert $page) => $page->where('whatsappNumber', '2290197939315'));
+    }
+
+    public function test_product_page_has_no_whatsapp_number_when_not_configured(): void
+    {
+        config(['kanvo.whatsapp' => null]);
+        $product = Product::factory()->published()->create();
+
+        $this->get(route('catalog.show', $product))
+            ->assertInertia(fn (Assert $page) => $page->where('whatsappNumber', null));
+    }
+
     public function test_unpublished_product_is_hidden_from_public_but_previewable_by_owner_and_admin(): void
     {
         $product = Product::factory()->pendingReview()->create();

@@ -32,6 +32,12 @@ export function AmbiancePhoto({
                 alt={photo.caption}
                 loading={eager ? 'eager' : 'lazy'}
                 decoding="async"
+                ref={(image) => {
+                    /* Photo déjà en cache : « load » a pu passer avant React, on vérifie directement. */
+                    if (image?.complete && image.naturalWidth > 0) {
+                        setLoaded(true);
+                    }
+                }}
                 onLoad={() => setLoaded(true)}
                 className={cn(
                     'h-full w-full object-cover transition-opacity duration-700',

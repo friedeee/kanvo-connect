@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { register } from '@/routes';
+import { home } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 import PasskeyVerify from '@/components/passkey-verify';
@@ -97,9 +97,12 @@ export default function Login({ status, canResetPassword }: Props) {
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            Pas encore de compte ?{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                Créer un compte
+                            Les comptes sont créés par l’équipe Kanvô.{' '}
+                            <TextLink
+                                href={`${home.url()}#rejoindre`}
+                                tabIndex={5}
+                            >
+                                Vous êtes artisan ?
                             </TextLink>
                         </div>
                     </>

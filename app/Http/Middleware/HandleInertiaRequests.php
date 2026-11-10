@@ -43,6 +43,17 @@ class HandleInertiaRequests extends Middleware
                 'seller' => fn () => $request->user()?->seller?->only(['shop_name', 'slug', 'status']),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'whatsappNumber' => $this->whatsappNumber(),
         ];
+    }
+
+    /**
+     * Numéro WhatsApp de Kanvô réduit à ses chiffres, comme l'exige wa.me ; null s'il n'est pas configuré.
+     */
+    private function whatsappNumber(): ?string
+    {
+        $digits = preg_replace('/\D/', '', (string) config('kanvo.whatsapp'));
+
+        return $digits !== '' ? $digits : null;
     }
 }

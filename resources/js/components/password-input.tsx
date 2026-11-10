@@ -23,13 +23,18 @@ export default function PasswordInput({
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:outline-none"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={
+                    showPassword
+                        ? 'Masquer le mot de passe'
+                        : 'Afficher le mot de passe'
+                }
                 tabIndex={-1}
             >
+                {/* Œil barré : le mot de passe est caché. Œil ouvert : il est visible. */}
                 {showPassword ? (
-                    <EyeOff className="size-4" />
+                    <Eye className="size-4" aria-hidden />
                 ) : (
-                    <Eye className="size-4" />
+                    <EyeOff className="size-4" aria-hidden />
                 )}
             </button>
         </div>

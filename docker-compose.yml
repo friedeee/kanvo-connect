@@ -1,4 +1,4 @@
-# Services locaux de Kanvô Connect : `docker compose up -d` démarre PostgreSQL et Mailpit.
+# Services locaux de Kanvô : `docker compose up -d` démarre PostgreSQL et Mailpit.
 # Les identifiants viennent du fichier .env (DB_DATABASE, DB_USERNAME, DB_PASSWORD), lu automatiquement par Compose.
 name: kanvo-connect
 

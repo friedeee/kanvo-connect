@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import { AmbiancePhoto } from '@/components/ambiance-photo';
+import { PhotoSlideshow } from '@/components/photo-slideshow';
 import { BrandMark } from '@/layouts/public-layout';
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
@@ -17,18 +18,16 @@ export default function AuthSimpleLayout({
     return (
         <div className="grid min-h-svh bg-background lg:grid-cols-[1.05fr_1fr]">
             <aside className="relative hidden overflow-hidden bg-ink text-white lg:block">
-                <AmbiancePhoto
-                    name="metier"
-                    eager
+                <PhotoSlideshow
+                    photos={['metier', 'appliques', 'kente-volta', 'coton']}
                     className="absolute inset-0"
-                    imgClassName="animate-slow-zoom"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/30" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/30" />
                 <div className="relative flex h-full flex-col justify-between p-12">
                     <BrandMark light />
                     <div className="max-w-md animate-rise">
                         <p className="text-xs font-semibold tracking-[0.22em] text-gold uppercase">
-                            Kanvô Connect
+                            Pagnes tissés du Bénin
                         </p>
                         <p className="mt-4 font-display text-5xl leading-[1.05] tracking-tight">
                             Chaque fil raconte
